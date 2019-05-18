@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class GUI {
+class GUI {
     static JFrame mainFrame;
     static JPanel choosePanel;
     static ChessBoardUnit[][] chessBoard = new ChessBoardUnit[8][8];
