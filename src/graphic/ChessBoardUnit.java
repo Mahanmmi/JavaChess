@@ -96,25 +96,25 @@ public class ChessBoardUnit extends JButton {
 
     private static ArrayList<Coordinate> getMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
         ArrayList<Coordinate> moves = thisAbstractPiece.getMoves(unitCoordinates, chessBoard);
-        if (checkColorChecked(thisAbstractPiece.isWhite())) {
-            for (int i = 0; i < moves.size(); i++) {
-                Coordinate move = moves.get(i);
-                AbstractPiece targetAbstractPiece = chessBoard[move.getX()][move.getY()].getAbstractPiece();
-                move(chessBoard[move.getX()][move.getY()], chessBoard[unitCoordinates.getX()][unitCoordinates.getY()]);
-                updateChecks();
-                if (checkColorChecked(thisAbstractPiece.isWhite())) {
-                    moves.remove(i);
-                    i--;
-                }
-                move(chessBoard[unitCoordinates.getX()][unitCoordinates.getY()], chessBoard[move.getX()][move.getY()]);
-                if (targetAbstractPiece != null) {
-                    chessBoard[move.getX()][move.getY()].setAbstractPiece(targetAbstractPiece);
-                    chessBoard[move.getX()][move.getY()].setIcon(targetAbstractPiece.getIcon());
 
-                }
-                updateChecks();
+        for (int i = 0; i < moves.size(); i++) {
+            Coordinate move = moves.get(i);
+            AbstractPiece targetAbstractPiece = chessBoard[move.getX()][move.getY()].getAbstractPiece();
+            move(chessBoard[move.getX()][move.getY()], chessBoard[unitCoordinates.getX()][unitCoordinates.getY()]);
+            updateChecks();
+            if (checkColorChecked(thisAbstractPiece.isWhite())) {
+                moves.remove(i);
+                i--;
             }
+            move(chessBoard[unitCoordinates.getX()][unitCoordinates.getY()], chessBoard[move.getX()][move.getY()]);
+            if (targetAbstractPiece != null) {
+                chessBoard[move.getX()][move.getY()].setAbstractPiece(targetAbstractPiece);
+                chessBoard[move.getX()][move.getY()].setIcon(targetAbstractPiece.getIcon());
+
+            }
+            updateChecks();
         }
+
         return moves;
     }
 
@@ -201,7 +201,6 @@ public class ChessBoardUnit extends JButton {
             }
         }
         target.setAbstractPiece(source.getAbstractPiece());
-        source.getAbstractPiece().setFirstMove(false);
         target.setIcon(source.getIcon());
         source.setAbstractPiece(null);
         System.out.println(source);
@@ -243,6 +242,7 @@ public class ChessBoardUnit extends JButton {
 
                             //successful move
                             move(target, clickedUnit);
+                            target.getAbstractPiece().setFirstMove(false);
 
                             //Pawn Transfer
                             if (target.getAbstractPiece().getType().equals("Pawn")
