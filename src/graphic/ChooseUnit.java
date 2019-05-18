@@ -9,13 +9,13 @@ import static graphic.GUI.mainFrame;
 
 class ChooseUnit extends JButton {
     private Coordinate coordinate;
-    private String textt;
+    private String childText;
     private JFrame chooseWindow;
 
     ChooseUnit(String text, Coordinate coordinate, JFrame chooseWindow) {
         super(text);
         this.chooseWindow = chooseWindow;
-        this.textt = text;
+        this.childText = text;
         this.coordinate = coordinate;
         addListener();
     }
@@ -24,7 +24,7 @@ class ChooseUnit extends JButton {
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AbstractPiece newAbstractPiece = null;
-                switch (textt) {
+                switch (childText) {
                     case "Bishop": {
                         newAbstractPiece = new Bishop(chessBoard[coordinate.getX()][coordinate.getY()].getAbstractPiece().isWhite());
                         break;
