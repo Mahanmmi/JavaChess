@@ -4,7 +4,7 @@ import graphic.ChessBoardUnit;
 
 import java.util.ArrayList;
 
-public class Queen extends Piece {
+public class Queen extends AbstractPiece {
     public Queen(boolean isWhite) {
         super("Queen", isWhite);
     }
@@ -42,11 +42,11 @@ public class Queen extends Piece {
             flag = RookBishopRemover(coordinates, new Coordinate(i, j), chessBoard, flag);
         }
 
-
         flag = false;
         for (int i = x + 1, j = y - 1; i < 8 && j >= 0; i++, j--) {
             flag = RookBishopRemover(coordinates, new Coordinate(i, j), chessBoard, flag);
         }
+
 
         flag = false;
         for (int i = x + 1; i < 8; i++) {
@@ -67,6 +67,7 @@ public class Queen extends Piece {
         for (int i = y - 1; i >= 0; i--) {
             flag = RookBishopRemover(coordinates, new Coordinate(x, i), chessBoard, flag);
         }
+
 
         return coordinates;
     }

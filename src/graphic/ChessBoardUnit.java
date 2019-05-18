@@ -1,7 +1,7 @@
 package graphic;
 
+import logic.AbstractPiece;
 import logic.Coordinate;
-import logic.Piece;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -13,7 +13,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class ChessBoardUnit extends JButton {
     private final Coordinate unitCoordinates;
-    private Piece piece;
+    private AbstractPiece abstractPiece;
     private Color defaultColor;
     private static ChessBoardUnit clickedUnit = null;
     private boolean whiteCheck;
@@ -24,9 +24,9 @@ public class ChessBoardUnit extends JButton {
         this(unitCoordinates, null);
     }
 
-    ChessBoardUnit(Coordinate unitCoordinates, Piece piece) {
+    ChessBoardUnit(Coordinate unitCoordinates, AbstractPiece abstractPiece) {
         this.unitCoordinates = unitCoordinates;
-        this.piece = piece;
+        this.abstractPiece = abstractPiece;
         if ((unitCoordinates.getX() + unitCoordinates.getY()) % 2 == 0) {
             defaultColor = Color.WHITE;
             this.setBackground(defaultColor);
@@ -35,9 +35,9 @@ public class ChessBoardUnit extends JButton {
             this.setBackground(defaultColor);
         }
 
-        if (piece != null) {
+        if (abstractPiece != null) {
             this.setMargin(new Insets(0, 0, 0, 0));
-            this.setIcon(piece.getIcon());
+            this.setIcon(abstractPiece.getIcon());
         }
         addListener();
     }
@@ -51,15 +51,15 @@ public class ChessBoardUnit extends JButton {
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Piece thisPiece = chessBoard[i][j].getPiece();
-                if (thisPiece == null) {
+                AbstractPiece thisAbstractPiece = chessBoard[i][j].getAbstractPiece();
+                if (thisAbstractPiece == null) {
                     continue;
                 }
-                ArrayList<Coordinate> checkedUnits = thisPiece.getAllMoves(new Coordinate(i, j), chessBoard);
+                ArrayList<Coordinate> checkedUnits = thisAbstractPiece.getChecked(new Coordinate(i, j), chessBoard);
                 for (Coordinate checked : checkedUnits) {
                     int x = checked.getX();
                     int y = checked.getY();
-                    if (thisPiece.isWhite()) {
+                    if (thisAbstractPiece.isWhite()) {
                         chessBoard[x][y].setBlackCheck(true);
                     } else {
                         chessBoard[x][y].setWhiteCheck(true);
@@ -72,11 +72,11 @@ public class ChessBoardUnit extends JButton {
     private static Coordinate findKing(boolean isWhite) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Piece thisPiece = chessBoard[i][j].getPiece();
-                if (thisPiece == null) {
+                AbstractPiece thisAbstractPiece = chessBoard[i][j].getAbstractPiece();
+                if (thisAbstractPiece == null) {
                     continue;
                 }
-                if (thisPiece.getType().equals("King") && thisPiece.isWhite() == isWhite) {
+                if (thisAbstractPiece.getType().equals("King") && thisAbstractPiece.isWhite() == isWhite) {
                     return new Coordinate(i, j);
                 }
             }
@@ -94,22 +94,22 @@ public class ChessBoardUnit extends JButton {
         return false;
     }
 
-    private static ArrayList<Coordinate> getMovables(Coordinate unitCoordinates, Piece thisPiece) {
-        ArrayList<Coordinate> moves = thisPiece.getMoves(unitCoordinates, chessBoard);
-        if (checkColorChecked(thisPiece.isWhite())) {
+    private static ArrayList<Coordinate> getMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
+        ArrayList<Coordinate> moves = thisAbstractPiece.getMoves(unitCoordinates, chessBoard);
+        if (checkColorChecked(thisAbstractPiece.isWhite())) {
             for (int i = 0; i < moves.size(); i++) {
                 Coordinate move = moves.get(i);
-                Piece targetPiece = chessBoard[move.getX()][move.getY()].getPiece();
+                AbstractPiece targetAbstractPiece = chessBoard[move.getX()][move.getY()].getAbstractPiece();
                 move(chessBoard[move.getX()][move.getY()], chessBoard[unitCoordinates.getX()][unitCoordinates.getY()]);
                 updateChecks();
-                if (checkColorChecked(thisPiece.isWhite())) {
+                if (checkColorChecked(thisAbstractPiece.isWhite())) {
                     moves.remove(i);
                     i--;
                 }
                 move(chessBoard[unitCoordinates.getX()][unitCoordinates.getY()], chessBoard[move.getX()][move.getY()]);
-                if (targetPiece != null) {
-                    chessBoard[move.getX()][move.getY()].setPiece(targetPiece);
-                    chessBoard[move.getX()][move.getY()].setIcon(targetPiece.getIcon());
+                if (targetAbstractPiece != null) {
+                    chessBoard[move.getX()][move.getY()].setAbstractPiece(targetAbstractPiece);
+                    chessBoard[move.getX()][move.getY()].setIcon(targetAbstractPiece.getIcon());
 
                 }
                 updateChecks();
@@ -118,13 +118,13 @@ public class ChessBoardUnit extends JButton {
         return moves;
     }
 
-    private static void colorizeMovables(Coordinate unitCoordinates, Piece thisPiece) {
-        ArrayList<Coordinate> moves = getMovables(unitCoordinates, thisPiece);
+    private static void colorizeMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
+        ArrayList<Coordinate> moves = getMovables(unitCoordinates, thisAbstractPiece);
         for (Coordinate move : moves) {
             for (Object o : choosePanel.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
-                        if (((ChessBoardUnit) o).piece == null) {
+                        if (((ChessBoardUnit) o).abstractPiece == null) {
                             ((ChessBoardUnit) o).setBackground(Color.GREEN);
                         } else {
                             ((ChessBoardUnit) o).setBackground(Color.RED);
@@ -135,8 +135,8 @@ public class ChessBoardUnit extends JButton {
         }
     }
 
-    private static void undoColorizeMovables(Coordinate unitCoordinates, Piece thisPiece) {
-        ArrayList<Coordinate> moves = thisPiece.getMoves(unitCoordinates, chessBoard);
+    private static void undoColorizeMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
+        ArrayList<Coordinate> moves = thisAbstractPiece.getMoves(unitCoordinates, chessBoard);
         for (Coordinate move : moves) {
             for (Object o : choosePanel.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
@@ -153,16 +153,16 @@ public class ChessBoardUnit extends JButton {
         int blackAvailableMoves = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Piece thisPiece = chessBoard[i][j].getPiece();
-                if (thisPiece == null) {
+                AbstractPiece thisAbstractPiece = chessBoard[i][j].getAbstractPiece();
+                if (thisAbstractPiece == null) {
                     continue;
                 }
-                if (thisPiece.isWhite()) {
-                    whiteAvailableMoves += getMovables(new Coordinate(i, j), thisPiece).size();
+                if (thisAbstractPiece.isWhite()) {
+                    whiteAvailableMoves += getMovables(new Coordinate(i, j), thisAbstractPiece).size();
                 } else {
-                    blackAvailableMoves += getMovables(new Coordinate(i, j), thisPiece).size();
+                    blackAvailableMoves += getMovables(new Coordinate(i, j), thisAbstractPiece).size();
                 }
-                undoColorizeMovables(new Coordinate(i, j), thisPiece);
+                undoColorizeMovables(new Coordinate(i, j), thisAbstractPiece);
             }
         }
         if (checkColorChecked(true) && whiteAvailableMoves == 0 && turn % 2 == 0) {
@@ -200,10 +200,10 @@ public class ChessBoardUnit extends JButton {
                 }
             }
         }
-        target.setPiece(source.getPiece());
-        source.getPiece().setFirstMove(false);
+        target.setAbstractPiece(source.getAbstractPiece());
+        source.getAbstractPiece().setFirstMove(false);
         target.setIcon(source.getIcon());
-        source.setPiece(null);
+        source.setAbstractPiece(null);
         System.out.println(source);
         source.setIcon(null);
 
@@ -213,39 +213,39 @@ public class ChessBoardUnit extends JButton {
     private void addListener() {
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (piece != null && ((piece.isWhite() && turn % 2 == 0) || (!piece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
-                    colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, piece);
+                if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
+                    colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                 }
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (piece != null && ((piece.isWhite() && turn % 2 == 0) || (!piece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
-                    undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, piece);
+                if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
+                    undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                 }
             }
 
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ChessBoardUnit target = (ChessBoardUnit) evt.getSource();
                 if (clickedUnit == null) {
-                    if (piece != null && ((piece.isWhite() && turn % 2 == 0) || (!piece.isWhite()) && turn % 2 == 1)) {
+                    if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite()) && turn % 2 == 1)) {
                         setBackground(Color.YELLOW);
-                        colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, piece);
+                        colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                         clickedUnit = target;
                     }
                 } else {
                     if (clickedUnit == target) {
-                        undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, piece);
+                        undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                         clickedUnit.setBackground(clickedUnit.defaultColor);
                         clickedUnit = null;
                     } else {
-                        if ((((clickedUnit.piece.isWhite() && turn % 2 == 0) || (!clickedUnit.piece.isWhite()) && turn % 2 == 1))
+                        if ((((clickedUnit.abstractPiece.isWhite() && turn % 2 == 0) || (!clickedUnit.abstractPiece.isWhite()) && turn % 2 == 1))
                                 && (target.getBackground() == Color.RED || target.getBackground() == Color.GREEN)) {
 
                             //successful move
                             move(target, clickedUnit);
 
                             //Pawn Transfer
-                            if (target.getPiece().getType().equals("Pawn")
+                            if (target.getAbstractPiece().getType().equals("Pawn")
                                     && (target.unitCoordinates.getY() == 0 || target.unitCoordinates.getY() == 7)) {
                                 JFrame chooseWindow = new JFrame();
                                 chooseWindow.setLayout(new BorderLayout());
@@ -276,7 +276,7 @@ public class ChessBoardUnit extends JButton {
 
                             //Castling
                             int deltaX = Math.abs(target.unitCoordinates.getX() - clickedUnit.unitCoordinates.getX());
-                            if (target.getPiece().getType().equals("King") && deltaX > 1) {
+                            if (target.getAbstractPiece().getType().equals("King") && deltaX > 1) {
                                 if (deltaX == 2) {
                                     ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
                                     ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
@@ -302,12 +302,12 @@ public class ChessBoardUnit extends JButton {
         });
     }
 
-    public Piece getPiece() {
-        return piece;
+    public AbstractPiece getAbstractPiece() {
+        return abstractPiece;
     }
 
-    void setPiece(Piece piece) {
-        this.piece = piece;
+    void setAbstractPiece(AbstractPiece abstractPiece) {
+        this.abstractPiece = abstractPiece;
     }
 
     public boolean isWhiteCheck() {
@@ -330,7 +330,7 @@ public class ChessBoardUnit extends JButton {
     public String toString() {
         return "ChessBoardUnit{" +
                 "" + unitCoordinates +
-                " piece=" + piece +
+                " abstractPiece=" + abstractPiece +
                 " White check = " + whiteCheck +
                 " Black check = " + blackCheck +
                 '}';

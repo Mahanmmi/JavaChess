@@ -22,21 +22,21 @@ public class ChooseUnit extends JButton {
     private void addListener(){
         addMouseListener(new java.awt.event.MouseAdapter(){
             public void mouseClicked(java.awt.event.MouseEvent evt){
-                Piece newPiece = null;
+                AbstractPiece newAbstractPiece = null;
                 if(textt.equals("Bishop")){
-                    newPiece = new Bishop(chessBoard[coordinate.getX()][coordinate.getY()].getPiece().isWhite());
+                    newAbstractPiece = new Bishop(chessBoard[coordinate.getX()][coordinate.getY()].getAbstractPiece().isWhite());
                 }
                 else if(textt.equals("Knight")){
-                    newPiece = new Knight(chessBoard[coordinate.getX()][coordinate.getY()].getPiece().isWhite());
+                    newAbstractPiece = new Knight(chessBoard[coordinate.getX()][coordinate.getY()].getAbstractPiece().isWhite());
                 }
                 else if(textt.equals("Rook")){
-                    newPiece = new Rook(chessBoard[coordinate.getX()][coordinate.getY()].getPiece().isWhite());
+                    newAbstractPiece = new Rook(chessBoard[coordinate.getX()][coordinate.getY()].getAbstractPiece().isWhite());
                 }
                 else if(textt.equals("Queen")){
-                    newPiece = new Queen(chessBoard[coordinate.getX()][coordinate.getY()].getPiece().isWhite());
+                    newAbstractPiece = new Queen(chessBoard[coordinate.getX()][coordinate.getY()].getAbstractPiece().isWhite());
                 }
-                chessBoard[coordinate.getX()][coordinate.getY()].setPiece(newPiece);
-                chessBoard[coordinate.getX()][coordinate.getY()].setIcon(newPiece.getIcon());
+                chessBoard[coordinate.getX()][coordinate.getY()].setAbstractPiece(newAbstractPiece);
+                chessBoard[coordinate.getX()][coordinate.getY()].setIcon(newAbstractPiece.getIcon());
                 mainFrame.setVisible(true);
                 chooseWindow.dispose();
             }

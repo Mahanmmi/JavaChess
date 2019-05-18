@@ -4,7 +4,7 @@ import graphic.ChessBoardUnit;
 
 import java.util.ArrayList;
 
-public class King extends Piece {
+public class King extends AbstractPiece {
     public King(boolean isWhite) {
         super("King", isWhite);
     }
@@ -51,38 +51,38 @@ public class King extends Piece {
             if (isWhite) {
                 if (!chessBoard[4][0].isWhiteCheck()
                         && !chessBoard[5][0].isWhiteCheck()
-                        && chessBoard[5][0].getPiece() == null
+                        && chessBoard[5][0].getAbstractPiece() == null
                         && !chessBoard[6][0].isWhiteCheck()
-                        && chessBoard[6][0].getPiece() == null
-                        && chessBoard[7][0].getPiece().isFirstMove()) {
+                        && chessBoard[6][0].getAbstractPiece() == null
+                        && chessBoard[7][0].getAbstractPiece().isFirstMove()) {
                     coordinates.add(new Coordinate(6,0));
                 }
                 if (!chessBoard[4][0].isWhiteCheck()
                         && !chessBoard[3][0].isWhiteCheck()
-                        && chessBoard[3][0].getPiece() == null
+                        && chessBoard[3][0].getAbstractPiece() == null
                         && !chessBoard[2][0].isWhiteCheck()
-                        && chessBoard[2][0].getPiece() == null
+                        && chessBoard[2][0].getAbstractPiece() == null
                         && !chessBoard[1][0].isWhiteCheck()
-                        && chessBoard[1][0].getPiece() == null
-                        && chessBoard[0][0].getPiece().isFirstMove()){
+                        && chessBoard[1][0].getAbstractPiece() == null
+                        && chessBoard[0][0].getAbstractPiece().isFirstMove()){
                     coordinates.add(new Coordinate(1,0));
                 }
             } else {
                 if (!chessBoard[4][7].isBlackCheck() && !chessBoard[5][7].isBlackCheck()
-                        && chessBoard[5][7].getPiece() == null
+                        && chessBoard[5][7].getAbstractPiece() == null
                         && !chessBoard[6][7].isBlackCheck()
-                        && chessBoard[6][7].getPiece() == null
-                        && chessBoard[7][7].getPiece().isFirstMove()) {
+                        && chessBoard[6][7].getAbstractPiece() == null
+                        && chessBoard[7][7].getAbstractPiece().isFirstMove()) {
                     coordinates.add(new Coordinate(6,7));
                 }
                 if (!chessBoard[4][7].isBlackCheck()
                         && !chessBoard[3][7].isBlackCheck()
-                        && chessBoard[3][7].getPiece() == null
+                        && chessBoard[3][7].getAbstractPiece() == null
                         && !chessBoard[2][7].isBlackCheck()
-                        && chessBoard[2][7].getPiece() == null
+                        && chessBoard[2][7].getAbstractPiece() == null
                         && !chessBoard[1][7].isBlackCheck()
-                        && chessBoard[1][7].getPiece() == null
-                        && chessBoard[0][7].getPiece().isFirstMove()){
+                        && chessBoard[1][7].getAbstractPiece() == null
+                        && chessBoard[0][7].getAbstractPiece().isFirstMove()){
                     coordinates.add(new Coordinate(1,7));
                 }
             }

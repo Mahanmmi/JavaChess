@@ -4,7 +4,7 @@ import graphic.ChessBoardUnit;
 
 import java.util.ArrayList;
 
-public class Bishop extends Piece {
+public class Bishop extends AbstractPiece {
     public Bishop(boolean isWhite) {
         super("Bishop", isWhite);
     }
@@ -40,7 +40,6 @@ public class Bishop extends Piece {
         for (int i = x - 1, j = y + 1; i >= 0 && j < 8; i--, j++) {
             flag = RookBishopRemover(coordinates, new Coordinate(i, j), chessBoard, flag);
         }
-
 
         flag = false;
         for (int i = x + 1, j = y - 1; i < 8 && j >= 0; i++, j--) {
