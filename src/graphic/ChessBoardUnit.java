@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static graphic.GUI.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class ChessBoardUnit extends JButton {
     private final Coordinate unitCoordinates;
@@ -159,23 +160,27 @@ public class ChessBoardUnit extends JButton {
             }
         }
         if (checkColorChecked(true) && whiteAvaiableMoves == 0 && turn % 2 == 0) {
-            System.out.println("Black is winner!");
+            System.out.println("Winner is black!");
             mainFrame.dispose();
+            showMessageDialog(null, "Winner is black!");
             System.exit(0);
             return;
         } else if (whiteAvaiableMoves == 0 && turn % 2 == 0) {
             System.out.println("POT!");
             mainFrame.dispose();
+            showMessageDialog(null, "POT!");
             System.exit(0);
             return;
         }
         if (checkColorChecked(false) && blackAvaiableMoves == 0 && turn % 2 == 1) {
-            System.out.println("White is winner!");
+            System.out.println("Winner is white!");
             mainFrame.dispose();
+            showMessageDialog(null, "Winner is white!");
             System.exit(0);
         } else if (blackAvaiableMoves == 0 && turn % 2 == 1) {
             System.out.println("POT!");
             mainFrame.dispose();
+            showMessageDialog(null, "POT!");
             System.exit(0);
         }
 
