@@ -7,11 +7,11 @@ import javax.swing.*;
 import static graphic.GUI.chessBoard;
 import static graphic.GUI.mainFrame;
 
-public class chooseUnit extends JButton {
+public class ChooseUnit extends JButton {
     private Coordinate coordinate;
     private String textt;
     private JFrame chooseWindow;
-    public chooseUnit(String text,Coordinate coordinate, JFrame chooseWindow) {
+    public ChooseUnit(String text, Coordinate coordinate, JFrame chooseWindow) {
         super(text);
         this.chooseWindow = chooseWindow;
         this.textt = text;
