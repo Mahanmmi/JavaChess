@@ -168,26 +168,26 @@ public class ChessBoardUnit extends JButton {
         }
         if (checkColorChecked(true) && whiteAvailableMoves == 0 && turn % 2 == 0) {
             System.out.println("Winner is black!");
-            mainFrame.dispose();
             showMessageDialog(null, "Winner is black!");
+            mainFrame.dispose();
             System.exit(0);
             return;
         } else if (whiteAvailableMoves == 0 && turn % 2 == 0) {
             System.out.println("POT!");
-            mainFrame.dispose();
             showMessageDialog(null, "POT!");
+            mainFrame.dispose();
             System.exit(0);
             return;
         }
         if (checkColorChecked(false) && blackAvailableMoves == 0 && turn % 2 == 1) {
             System.out.println("Winner is white!");
-            mainFrame.dispose();
             showMessageDialog(null, "Winner is white!");
+            mainFrame.dispose();
             System.exit(0);
         } else if (blackAvailableMoves == 0 && turn % 2 == 1) {
             System.out.println("POT!");
-            mainFrame.dispose();
             showMessageDialog(null, "POT!");
+            mainFrame.dispose();
             System.exit(0);
         }
 
