@@ -121,7 +121,7 @@ public class ChessBoardUnit extends JButton {
     private static void colorizeMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
         ArrayList<Coordinate> moves = getMovables(unitCoordinates, thisAbstractPiece);
         for (Coordinate move : moves) {
-            for (Object o : choosePanel.getComponents()) {
+            for (Object o : mainBoard.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
                         if (((ChessBoardUnit) o).abstractPiece == null) {
@@ -138,7 +138,7 @@ public class ChessBoardUnit extends JButton {
     private static void undoColorizeMovables(Coordinate unitCoordinates, AbstractPiece thisAbstractPiece) {
         ArrayList<Coordinate> moves = thisAbstractPiece.getMoves(unitCoordinates, chessBoard);
         for (Coordinate move : moves) {
-            for (Object o : choosePanel.getComponents()) {
+            for (Object o : mainBoard.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
                         ((ChessBoardUnit) o).setBackground(((ChessBoardUnit) o).defaultColor);
@@ -241,10 +241,18 @@ public class ChessBoardUnit extends JButton {
                                 && (target.getBackground() == Color.RED || target.getBackground() == Color.GREEN)) {
 
                             //successful move
+                            if(target.abstractPiece != null){
+                                if(target.abstractPiece.isWhite()){
+                                    newWhiteTakenPieces.add(target.abstractPiece);
+                                } else {
+                                    newBlackTakenPieces.add(target.abstractPiece);
+                                }
+                            }
+
                             move(target, clickedUnit);
                             target.getAbstractPiece().setFirstMove(false);
 
-                            //Pawn Transfer
+                            //Pawn Promotion
                             if (target.getAbstractPiece().getType().equals("Pawn")
                                     && (target.unitCoordinates.getY() == 0 || target.unitCoordinates.getY() == 7)) {
                                 JFrame chooseWindow = new JFrame();
@@ -275,21 +283,23 @@ public class ChessBoardUnit extends JButton {
                             }
 
                             //Castling
-                            int deltaX = Math.abs(target.unitCoordinates.getX() - clickedUnit.unitCoordinates.getX());
-                            if (target.getAbstractPiece().getType().equals("King") && deltaX > 1) {
-                                if (deltaX == 2) {
-                                    ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
-                                    ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
-                                    move(targetPrim, sourceRook);
-                                }
-                                if (deltaX == 3) {
-                                    ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
-                                    ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
-                                    move(targetPrim, sourceRook);
+                            { //Castling
+                                int deltaX = Math.abs(target.unitCoordinates.getX() - clickedUnit.unitCoordinates.getX());
+                                if (target.getAbstractPiece().getType().equals("King") && deltaX > 1) {
+                                    if (deltaX == 2) {
+                                        ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
+                                        ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
+                                        move(targetPrim, sourceRook);
+                                    }
+                                    if (deltaX == 3) {
+                                        ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
+                                        ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
+                                        move(targetPrim, sourceRook);
+                                    }
                                 }
                             }
 
-                            updateUI();
+                            GUI.updateBoards();
                             updateChecks();
                             clickedUnit.setBackground(clickedUnit.defaultColor);
                             clickedUnit = null;

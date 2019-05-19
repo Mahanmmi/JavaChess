@@ -27,7 +27,7 @@ public class Knight extends AbstractPiece {
         if (x - 1 >= 0 && y + 2 < 8) {
             coordinates.add(new Coordinate(x - 1, y + 2));
         }
-        if (x - 2 >= 0 && y + 1 < 0) {
+        if (x - 2 >= 0 && y + 1 < 8) {
             coordinates.add(new Coordinate(x - 2, y + 1));
         }
         if (x + 1 < 8 && y - 2 >= 0) {

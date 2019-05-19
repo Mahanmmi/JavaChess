@@ -5,24 +5,36 @@ import logic.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 class GUI {
     static JFrame mainFrame;
-    static JPanel choosePanel;
-    static ChessBoardUnit[][] chessBoard = new ChessBoardUnit[8][8];
+    static JPanel mainBoard;
+    private static JPanel blackTakenBoard;
+    private static JPanel whiteTakenBoard;
+    static ChessBoardUnit[][] chessBoard;
+    static ArrayList<AbstractPiece> newWhiteTakenPieces;
+    static ArrayList<AbstractPiece> newBlackTakenPieces;
     static int turn = 0;
 
     GUI() {
         mainFrame = new JFrame();
-        choosePanel = new JPanel();
+        mainBoard = new JPanel();
         chessBoard = new ChessBoardUnit[8][8];
+
+        blackTakenBoard = new JPanel();
+        whiteTakenBoard = new JPanel();
+        newWhiteTakenPieces = new ArrayList<>();
+        newBlackTakenPieces = new ArrayList<>();
 
 
         initGUI();
 
 
+        mainBoard.setVisible(true);
+        blackTakenBoard.setVisible(true);
+        whiteTakenBoard.setVisible(true);
         mainFrame.setVisible(true);
-        choosePanel.setVisible(true);
     }
 
     private void initPieces() {
@@ -72,29 +84,94 @@ class GUI {
     private void initGUI() {
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainFrame.setSize(new Dimension(700, 700));
+        mainFrame.setSize(new Dimension(1100, 700));
         mainFrame.setResizable(false);
 
 
-        choosePanel.setPreferredSize(new Dimension(500, 500));
-        mainFrame.add(choosePanel, BorderLayout.CENTER);
+        mainBoard.setPreferredSize(new Dimension(500, 500));
+        blackTakenBoard.setPreferredSize(new Dimension(200,500));
+        whiteTakenBoard.setPreferredSize(new Dimension(200,500));
 
-        choosePanel.setLayout(new GridLayout(8, 8));
-        choosePanel.setBorder(new LineBorder(Color.BLACK));
+        mainBoard.setLayout(new GridLayout(8, 8));
+        mainBoard.setBorder(new LineBorder(Color.BLACK));
+
+        blackTakenBoard.setBorder(new LineBorder(Color.BLACK));
+
+        JButton blackHead = new JButton();
+        blackHead.setSize(new Dimension(200,50));
+        blackHead.setText("Black Taken Pieces");
+        blackHead.setEnabled(false);
+        blackHead.setBackground(Color.cyan);
+        blackHead.setForeground(Color.black);
+
+        blackTakenBoard.add(blackHead);
+
+        whiteTakenBoard.setBorder(new LineBorder(Color.BLACK));
+
+        JButton whiteHead = new JButton();
+        whiteHead.setSize(new Dimension(200,50));
+        whiteHead.setText("White Taken Pieces");
+        whiteHead.setEnabled(false);
+        whiteHead.setBackground(Color.cyan);
+        whiteHead.setForeground(Color.BLACK);
+        whiteTakenBoard.add(whiteHead);
+
+        mainFrame.add(blackTakenBoard, BorderLayout.WEST);
+        mainFrame.add(whiteTakenBoard, BorderLayout.EAST);
+        mainFrame.add(mainBoard, BorderLayout.CENTER);
+
+//        for (int i = 0; i < 16; i++) {
+//            newWhiteTakenPieces.add(new Bishop(true));
+//        }
 
         initPieces();
-        updateBoard();
+        updateBoards();
     }
 
-    private void updateBoard() {
-        while(choosePanel.getComponentCount()!=0) {
-            choosePanel.remove(0);
+    static void updateBoards() {
+        while(mainBoard.getComponentCount()!=0) {
+            mainBoard.remove(0);
         }
         for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
                 System.out.println("(" + i + "," + j + ")" + " : " + chessBoard[i][j]);
-                choosePanel.add(chessBoard[j][i]);
+                mainBoard.add(chessBoard[j][i]);
             }
+        }
+
+        for (AbstractPiece whiteTakenPiece : newWhiteTakenPieces) {
+            if(whiteTakenBoard.getComponentCount() == 1){
+                JButton tmp = new JButton();
+                tmp.setSize(new Dimension(0,50));
+                tmp.setEnabled(false);
+                tmp.setVisible(false);
+                whiteTakenBoard.add(tmp);
+            }
+            JButton takenPiece = new JButton(whiteTakenPiece.getIcon());
+            takenPiece.setBackground(Color.white);
+            takenPiece.setEnabled(false);
+            whiteTakenBoard.add(takenPiece);
+        }
+
+        for (AbstractPiece blackTakenPiece : newBlackTakenPieces) {
+            if(blackTakenBoard.getComponentCount() == 1){
+                JButton tmp = new JButton();
+                tmp.setSize(new Dimension(0,50));
+                tmp.setEnabled(false);
+                tmp.setVisible(false);
+                blackTakenBoard.add(tmp);
+            }
+            JButton takenPiece = new JButton(blackTakenPiece.getIcon());
+            takenPiece.setBackground(Color.black);
+            takenPiece.setEnabled(false);
+            blackTakenBoard.add(takenPiece);
+        }
+
+        while(newWhiteTakenPieces.size()!=0){
+            newWhiteTakenPieces.remove(0);
+        }
+        while(newBlackTakenPieces.size()!=0){
+            newBlackTakenPieces.remove(0);
         }
     }
 }
