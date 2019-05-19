@@ -92,17 +92,20 @@ class GUI {
 
 
         mainBoard.setPreferredSize(new Dimension(500, 500));
-        blackTakenBoard.setPreferredSize(new Dimension(200,500));
-        whiteTakenBoard.setPreferredSize(new Dimension(200,500));
-        turnShowcase.setPreferredSize(new Dimension(1100,100));
+        blackTakenBoard.setPreferredSize(new Dimension(200, 500));
+        whiteTakenBoard.setPreferredSize(new Dimension(200, 500));
+        turnShowcase.setPreferredSize(new Dimension(1100, 100));
 
         mainBoard.setLayout(new GridLayout(8, 8));
         mainBoard.setBorder(new LineBorder(Color.BLACK));
 
+        turnShowcase.setLayout(new GridLayout(1, 1));
+        turnShowcase.setBorder(new LineBorder(Color.BLACK));
+
         blackTakenBoard.setBorder(new LineBorder(Color.BLACK));
 
         JButton blackHead = new JButton();
-        blackHead.setSize(new Dimension(200,50));
+        blackHead.setSize(new Dimension(200, 50));
         blackHead.setText("Black Taken Pieces");
         blackHead.setEnabled(false);
         blackHead.setBackground(Color.cyan);
@@ -113,7 +116,7 @@ class GUI {
         whiteTakenBoard.setBorder(new LineBorder(Color.BLACK));
 
         JButton whiteHead = new JButton();
-        whiteHead.setSize(new Dimension(200,50));
+        whiteHead.setSize(new Dimension(200, 50));
         whiteHead.setText("White Taken Pieces");
         whiteHead.setEnabled(false);
         whiteHead.setBackground(Color.cyan);
@@ -131,7 +134,7 @@ class GUI {
     }
 
     static void updateBoards() {
-        while(mainBoard.getComponentCount()!=0) {
+        while (mainBoard.getComponentCount() != 0) {
             mainBoard.remove(0);
         }
         for (int i = 7; i >= 0; i--) {
@@ -141,10 +144,20 @@ class GUI {
             }
         }
 
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessBoard[i][j].getAbstractPiece() == null) {
+                    chessBoard[i][j].setEnabled(false);
+                } else {
+                    chessBoard[i][j].setEnabled(true);
+                }
+            }
+        }
+
         for (AbstractPiece whiteTakenPiece : newWhiteTakenPieces) {
-            if(whiteTakenBoard.getComponentCount() == 1){
+            if (whiteTakenBoard.getComponentCount() == 1) {
                 JButton tmp = new JButton();
-                tmp.setSize(new Dimension(0,50));
+                tmp.setSize(new Dimension(0, 50));
                 tmp.setEnabled(false);
                 tmp.setVisible(false);
                 whiteTakenBoard.add(tmp);
@@ -156,11 +169,11 @@ class GUI {
         }
 
         for (AbstractPiece blackTakenPiece : newBlackTakenPieces) {
-            if(blackTakenBoard.getComponentCount() == 1){
+            if (blackTakenBoard.getComponentCount() == 1) {
                 JButton tmp = new JButton();
                 tmp.setEnabled(false);
                 tmp.setVisible(false);
-                tmp.setSize(new Dimension(0,50));
+                tmp.setSize(new Dimension(0, 50));
                 blackTakenBoard.add(tmp);
             }
             JButton takenPiece = new JButton(blackTakenPiece.getIcon());
@@ -169,12 +182,21 @@ class GUI {
             blackTakenBoard.add(takenPiece);
         }
 
-        while(newWhiteTakenPieces.size()!=0){
+        while (newWhiteTakenPieces.size() != 0) {
             newWhiteTakenPieces.remove(0);
         }
-        while(newBlackTakenPieces.size()!=0){
+        while (newBlackTakenPieces.size() != 0) {
             newBlackTakenPieces.remove(0);
         }
+        if (turnShowcase.getComponentCount() != 0) {
+            turnShowcase.remove(0);
+        }
+        JButton showcase = new JButton();
+        showcase.setBackground((turn % 2 == 0) ? Color.WHITE : Color.BLACK);
+        showcase.setText((turn % 2 == 0) ? "WHITE TURN" : "BLACK TURN");
+        showcase.setSize(new Dimension(1100, 100));
+        showcase.setEnabled(false);
+        turnShowcase.add(showcase);
     }
 }
 

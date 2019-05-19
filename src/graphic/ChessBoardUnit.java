@@ -320,13 +320,13 @@ public class ChessBoardUnit extends JButton {
                                 }
                             }
 
-                            GUI.updateBoards();
                             updateChecks();
                             clickedUnit.setBackground(clickedUnit.defaultColor);
                             colorizeCheckedKings();
                             clickedUnit = null;
                             turn++;
                             checkWin();
+                            updateBoards();
                         }
                     }
                 }
