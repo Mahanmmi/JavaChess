@@ -12,6 +12,7 @@ class GUI {
     static JPanel mainBoard;
     private static JPanel blackTakenBoard;
     private static JPanel whiteTakenBoard;
+    private static JPanel turnShowcase;
     static ChessBoardUnit[][] chessBoard;
     static ArrayList<AbstractPiece> newWhiteTakenPieces;
     static ArrayList<AbstractPiece> newBlackTakenPieces;
@@ -26,6 +27,7 @@ class GUI {
         whiteTakenBoard = new JPanel();
         newWhiteTakenPieces = new ArrayList<>();
         newBlackTakenPieces = new ArrayList<>();
+        turnShowcase = new JPanel();
 
 
         initGUI();
@@ -34,6 +36,7 @@ class GUI {
         mainBoard.setVisible(true);
         blackTakenBoard.setVisible(true);
         whiteTakenBoard.setVisible(true);
+        turnShowcase.setVisible(true);
         mainFrame.setVisible(true);
     }
 
@@ -84,13 +87,14 @@ class GUI {
     private void initGUI() {
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainFrame.setSize(new Dimension(1100, 700));
+        mainFrame.setSize(new Dimension(1100, 800));
         mainFrame.setResizable(false);
 
 
         mainBoard.setPreferredSize(new Dimension(500, 500));
         blackTakenBoard.setPreferredSize(new Dimension(200,500));
         whiteTakenBoard.setPreferredSize(new Dimension(200,500));
+        turnShowcase.setPreferredSize(new Dimension(1100,100));
 
         mainBoard.setLayout(new GridLayout(8, 8));
         mainBoard.setBorder(new LineBorder(Color.BLACK));
@@ -116,13 +120,11 @@ class GUI {
         whiteHead.setForeground(Color.BLACK);
         whiteTakenBoard.add(whiteHead);
 
+
         mainFrame.add(blackTakenBoard, BorderLayout.WEST);
         mainFrame.add(whiteTakenBoard, BorderLayout.EAST);
         mainFrame.add(mainBoard, BorderLayout.CENTER);
-
-//        for (int i = 0; i < 16; i++) {
-//            newWhiteTakenPieces.add(new Bishop(true));
-//        }
+        mainFrame.add(turnShowcase, BorderLayout.SOUTH);
 
         initPieces();
         updateBoards();
@@ -156,9 +158,9 @@ class GUI {
         for (AbstractPiece blackTakenPiece : newBlackTakenPieces) {
             if(blackTakenBoard.getComponentCount() == 1){
                 JButton tmp = new JButton();
-                tmp.setSize(new Dimension(0,50));
                 tmp.setEnabled(false);
                 tmp.setVisible(false);
+                tmp.setSize(new Dimension(0,50));
                 blackTakenBoard.add(tmp);
             }
             JButton takenPiece = new JButton(blackTakenPiece.getIcon());

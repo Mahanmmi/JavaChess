@@ -141,7 +141,8 @@ public class ChessBoardUnit extends JButton {
             for (Object o : mainBoard.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
-                        ((ChessBoardUnit) o).setBackground(((ChessBoardUnit) o).defaultColor);
+                        if(((ChessBoardUnit) o).getBackground()!=Color.ORANGE)
+                            ((ChessBoardUnit) o).setBackground(((ChessBoardUnit) o).defaultColor);
                     }
                 }
             }
@@ -203,10 +204,29 @@ public class ChessBoardUnit extends JButton {
         target.setAbstractPiece(source.getAbstractPiece());
         target.setIcon(source.getIcon());
         source.setAbstractPiece(null);
-        System.out.println(source);
+//        System.out.println(source);
         source.setIcon(null);
 
 
+    }
+
+    private static void colorizeCheckedKings(){
+        if(checkColorChecked(true)){
+            Coordinate whiteKing = findKing(true);
+            chessBoard[whiteKing.getX()][whiteKing.getY()].setBackground(Color.ORANGE);
+        } else {
+            Coordinate whiteKing = findKing(true);
+            chessBoard[whiteKing.getX()][whiteKing.getY()].setBackground(chessBoard[whiteKing.getX()][whiteKing.getY()].defaultColor);
+        }
+        if(checkColorChecked(false)){
+            Coordinate blackKing = findKing(false);
+            chessBoard[blackKing.getX()][blackKing.getY()].setBackground(Color.ORANGE);
+            System.out.println("HEY");
+        } else {
+            Coordinate blackKing = findKing(false);
+            chessBoard[blackKing.getX()][blackKing.getY()].setBackground(chessBoard[blackKing.getX()][blackKing.getY()].defaultColor);
+            System.out.println("WAY");
+        }
     }
 
     private void addListener() {
@@ -235,6 +255,7 @@ public class ChessBoardUnit extends JButton {
                     if (clickedUnit == target) {
                         undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                         clickedUnit.setBackground(clickedUnit.defaultColor);
+                        colorizeCheckedKings();
                         clickedUnit = null;
                     } else {
                         if ((((clickedUnit.abstractPiece.isWhite() && turn % 2 == 0) || (!clickedUnit.abstractPiece.isWhite()) && turn % 2 == 1))
@@ -302,6 +323,7 @@ public class ChessBoardUnit extends JButton {
                             GUI.updateBoards();
                             updateChecks();
                             clickedUnit.setBackground(clickedUnit.defaultColor);
+                            colorizeCheckedKings();
                             clickedUnit = null;
                             turn++;
                             checkWin();
