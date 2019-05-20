@@ -33,6 +33,11 @@ class GUI {
         initGUI();
 
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = screenSize.width / 2 - mainFrame.getWidth() / 2;
+        int y = screenSize.height / 2 - mainFrame.getHeight() / 2;
+        mainFrame.setLocation(x, y);
+
         mainBoard.setVisible(true);
         blackTakenBoard.setVisible(true);
         whiteTakenBoard.setVisible(true);

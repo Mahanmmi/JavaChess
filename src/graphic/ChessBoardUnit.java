@@ -282,6 +282,10 @@ public class ChessBoardUnit extends JButton {
                                 chooseWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                                 chooseWindow.setSize(new Dimension(300, 600));
                                 chooseWindow.setResizable(false);
+                                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                                int x = screenSize.width / 2 - chooseWindow.getWidth() / 2;
+                                int y = screenSize.height / 2 - chooseWindow.getHeight() / 2;
+                                chooseWindow.setLocation(x, y);
                                 JPanel choosePanel = new JPanel();
                                 choosePanel.setPreferredSize(new Dimension(300, 600));
 
