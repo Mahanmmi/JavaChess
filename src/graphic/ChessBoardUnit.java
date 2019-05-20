@@ -40,6 +40,7 @@ public class ChessBoardUnit extends JButton {
             this.setIcon(abstractPiece.getIcon());
             this.setDisabledIcon(abstractPiece.getIcon());
         }
+        super.setFocusable(false);
         addListener();
     }
 
@@ -145,7 +146,7 @@ public class ChessBoardUnit extends JButton {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
                         if (((ChessBoardUnit) o).getBackground() != Color.ORANGE) {
-                            if(((ChessBoardUnit) o).getBackground()==Color.GREEN){
+                            if (((ChessBoardUnit) o).getBackground() == Color.GREEN) {
                                 ((ChessBoardUnit) o).setEnabled(false);
                             }
                             ((ChessBoardUnit) o).setBackground(((ChessBoardUnit) o).defaultColor);
@@ -217,7 +218,6 @@ public class ChessBoardUnit extends JButton {
         source.setIcon(null);
         source.setDisabledIcon(null);
 
-
     }
 
     private static void colorizeCheckedKings() {
@@ -238,7 +238,6 @@ public class ChessBoardUnit extends JButton {
 //            System.out.println("WAY");
         }
     }
-
 
     private void addListener() {
         addMouseListener(new java.awt.event.MouseAdapter() {
