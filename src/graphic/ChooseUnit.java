@@ -4,8 +4,7 @@ import logic.*;
 
 import javax.swing.*;
 
-import static graphic.GUI.chessBoard;
-import static graphic.GUI.mainFrame;
+import static graphic.GUI.*;
 
 class ChooseUnit extends JButton {
     private Coordinate coordinate;
@@ -44,8 +43,9 @@ class ChooseUnit extends JButton {
                 }
                 chessBoard[coordinate.getX()][coordinate.getY()].setAbstractPiece(newAbstractPiece);
                 chessBoard[coordinate.getX()][coordinate.getY()].setIcon(newAbstractPiece.getIcon());
-                mainFrame.setVisible(true);
+                changeButtonsState(true);
                 chooseWindow.dispose();
+                updateBoards();
             }
         });
     }

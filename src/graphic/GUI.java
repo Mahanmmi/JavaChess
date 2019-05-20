@@ -45,6 +45,15 @@ class GUI {
         mainFrame.setVisible(true);
     }
 
+    static void changeButtonsState(boolean state){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chessBoard[i][j].setEnabled(state);
+                System.out.println("LOL" + state);
+            }
+        }
+    }
+
     private void initPieces() {
         //White Pieces
         chessBoard[0][0] = new ChessBoardUnit(new Coordinate(0, 0), new Rook(true));
@@ -144,7 +153,7 @@ class GUI {
         }
         for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
-                System.out.println("(" + i + "," + j + ")" + " : " + chessBoard[i][j]);
+//                System.out.println("(" + i + "," + j + ")" + " : " + chessBoard[i][j]);
                 mainBoard.add(chessBoard[j][i]);
             }
         }

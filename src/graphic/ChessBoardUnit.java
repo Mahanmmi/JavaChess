@@ -126,6 +126,7 @@ public class ChessBoardUnit extends JButton {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
                         if (((ChessBoardUnit) o).abstractPiece == null) {
                             ((ChessBoardUnit) o).setBackground(Color.GREEN);
+                            ((ChessBoardUnit) o).setEnabled(true);
                         } else {
                             ((ChessBoardUnit) o).setBackground(Color.RED);
                         }
@@ -141,8 +142,12 @@ public class ChessBoardUnit extends JButton {
             for (Object o : mainBoard.getComponents()) {
                 if (o instanceof ChessBoardUnit) {
                     if (((ChessBoardUnit) o).unitCoordinates.equals(move)) {
-                        if(((ChessBoardUnit) o).getBackground()!=Color.ORANGE)
+                        if (((ChessBoardUnit) o).getBackground() != Color.ORANGE) {
+                            if(((ChessBoardUnit) o).getBackground()==Color.GREEN){
+                                ((ChessBoardUnit) o).setEnabled(false);
+                            }
                             ((ChessBoardUnit) o).setBackground(((ChessBoardUnit) o).defaultColor);
+                        }
                     }
                 }
             }
@@ -211,127 +216,135 @@ public class ChessBoardUnit extends JButton {
 
     }
 
-    private static void colorizeCheckedKings(){
-        if(checkColorChecked(true)){
+    private static void colorizeCheckedKings() {
+        if (checkColorChecked(true)) {
             Coordinate whiteKing = findKing(true);
             chessBoard[whiteKing.getX()][whiteKing.getY()].setBackground(Color.ORANGE);
         } else {
             Coordinate whiteKing = findKing(true);
             chessBoard[whiteKing.getX()][whiteKing.getY()].setBackground(chessBoard[whiteKing.getX()][whiteKing.getY()].defaultColor);
         }
-        if(checkColorChecked(false)){
+        if (checkColorChecked(false)) {
             Coordinate blackKing = findKing(false);
             chessBoard[blackKing.getX()][blackKing.getY()].setBackground(Color.ORANGE);
-            System.out.println("HEY");
+//            System.out.println("HEY");
         } else {
             Coordinate blackKing = findKing(false);
             chessBoard[blackKing.getX()][blackKing.getY()].setBackground(chessBoard[blackKing.getX()][blackKing.getY()].defaultColor);
-            System.out.println("WAY");
+//            System.out.println("WAY");
         }
     }
+
 
     private void addListener() {
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
+                if (((JButton) evt.getSource()).isEnabled() && abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
                     colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                 }
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
+                if (((JButton) evt.getSource()).isEnabled() && abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite() && turn % 2 == 1)) && clickedUnit == null) {
                     undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                 }
             }
 
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ChessBoardUnit target = (ChessBoardUnit) evt.getSource();
-                if (clickedUnit == null) {
-                    if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite()) && turn % 2 == 1)) {
-                        setBackground(Color.YELLOW);
-                        colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
-                        clickedUnit = target;
-                    }
-                } else {
-                    if (clickedUnit == target) {
-                        undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
-                        clickedUnit.setBackground(clickedUnit.defaultColor);
-                        colorizeCheckedKings();
-                        clickedUnit = null;
+                if (((JButton) evt.getSource()).isEnabled()) {
+                    ChessBoardUnit target = (ChessBoardUnit) evt.getSource();
+                    if (clickedUnit == null) {
+                        if (abstractPiece != null && ((abstractPiece.isWhite() && turn % 2 == 0) || (!abstractPiece.isWhite()) && turn % 2 == 1)) {
+                            setBackground(Color.YELLOW);
+                            colorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
+                            clickedUnit = target;
+                        }
                     } else {
-                        if ((((clickedUnit.abstractPiece.isWhite() && turn % 2 == 0) || (!clickedUnit.abstractPiece.isWhite()) && turn % 2 == 1))
-                                && (target.getBackground() == Color.RED || target.getBackground() == Color.GREEN)) {
-
-                            //successful move
-                            if(target.abstractPiece != null){
-                                if(target.abstractPiece.isWhite()){
-                                    newWhiteTakenPieces.add(target.abstractPiece);
-                                } else {
-                                    newBlackTakenPieces.add(target.abstractPiece);
-                                }
-                            }
-
-                            move(target, clickedUnit);
-                            target.getAbstractPiece().setFirstMove(false);
-
-                            //Pawn Promotion
-                            if (target.getAbstractPiece().getType().equals("Pawn")
-                                    && (target.unitCoordinates.getY() == 0 || target.unitCoordinates.getY() == 7)) {
-                                JFrame chooseWindow = new JFrame();
-                                chooseWindow.setLayout(new BorderLayout());
-                                chooseWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                                chooseWindow.setSize(new Dimension(300, 600));
-                                chooseWindow.setResizable(false);
-                                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                                int x = screenSize.width / 2 - chooseWindow.getWidth() / 2;
-                                int y = screenSize.height / 2 - chooseWindow.getHeight() / 2;
-                                chooseWindow.setLocation(x, y);
-                                JPanel choosePanel = new JPanel();
-                                choosePanel.setPreferredSize(new Dimension(300, 600));
-
-                                chooseWindow.add(choosePanel, CENTER);
-                                choosePanel.setLayout(new GridLayout(4, 1));
-                                choosePanel.setBorder(new LineBorder(Color.BLACK));
-
-                                JButton bishop = new ChooseUnit("Bishop", target.unitCoordinates, chooseWindow);
-                                JButton knight = new ChooseUnit("Knight", target.unitCoordinates, chooseWindow);
-                                JButton rook = new ChooseUnit("Rook", target.unitCoordinates, chooseWindow);
-                                JButton queen = new ChooseUnit("Queen", target.unitCoordinates, chooseWindow);
-                                choosePanel.add(bishop);
-                                choosePanel.add(knight);
-                                choosePanel.add(rook);
-                                choosePanel.add(queen);
-
-
-                                mainFrame.setVisible(false);
-                                chooseWindow.setVisible(true);
-                                choosePanel.setVisible(true);
-                            }
-
-                            //Castling
-                            { //Castling
-                                int deltaX = Math.abs(target.unitCoordinates.getX() - clickedUnit.unitCoordinates.getX());
-                                if (target.getAbstractPiece().getType().equals("King") && deltaX > 1) {
-                                    if (deltaX == 2) {
-                                        ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
-                                        ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
-                                        move(targetPrim, sourceRook);
-                                    }
-                                    if (deltaX == 3) {
-                                        ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
-                                        ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
-                                        move(targetPrim, sourceRook);
-                                    }
-                                }
-                            }
-
-                            updateChecks();
+                        if (clickedUnit == target) {
+                            undoColorizeMovables(((ChessBoardUnit) evt.getSource()).unitCoordinates, abstractPiece);
                             clickedUnit.setBackground(clickedUnit.defaultColor);
                             colorizeCheckedKings();
                             clickedUnit = null;
-                            turn++;
-                            checkWin();
-                            updateBoards();
+                        } else {
+                            if ((((clickedUnit.abstractPiece.isWhite() && turn % 2 == 0) || (!clickedUnit.abstractPiece.isWhite()) && turn % 2 == 1))
+                                    && (target.getBackground() == Color.RED || target.getBackground() == Color.GREEN)) {
+
+                                //successful move
+                                if (target.abstractPiece != null) {
+                                    if (target.abstractPiece.isWhite()) {
+                                        newWhiteTakenPieces.add(target.abstractPiece);
+                                    } else {
+                                        newBlackTakenPieces.add(target.abstractPiece);
+                                    }
+                                }
+
+                                move(target, clickedUnit);
+                                target.getAbstractPiece().setFirstMove(false);
+
+                                //Pawn Promotion
+                                boolean isP = false;
+                                if (target.getAbstractPiece().getType().equals("Pawn")
+                                        && (target.unitCoordinates.getY() == 0 || target.unitCoordinates.getY() == 7)) {
+                                    isP = true;
+
+                                    changeButtonsState(false);
+
+                                    JFrame chooseWindow = new JFrame();
+                                    chooseWindow.setLayout(new BorderLayout());
+                                    chooseWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                                    chooseWindow.setSize(new Dimension(100, 200));
+                                    chooseWindow.setResizable(false);
+                                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                                    int x = screenSize.width / 2 - chooseWindow.getWidth() / 2;
+                                    int y = screenSize.height / 2 - chooseWindow.getHeight() / 2;
+                                    chooseWindow.setLocation(x, y);
+                                    JPanel choosePanel = new JPanel();
+                                    choosePanel.setPreferredSize(new Dimension(100, 200));
+
+                                    chooseWindow.add(choosePanel, CENTER);
+                                    choosePanel.setLayout(new GridLayout(4, 1));
+                                    choosePanel.setBorder(new LineBorder(Color.BLACK));
+
+                                    JButton bishop = new ChooseUnit("Bishop", target.unitCoordinates, chooseWindow);
+                                    JButton knight = new ChooseUnit("Knight", target.unitCoordinates, chooseWindow);
+                                    JButton rook = new ChooseUnit("Rook", target.unitCoordinates, chooseWindow);
+                                    JButton queen = new ChooseUnit("Queen", target.unitCoordinates, chooseWindow);
+                                    choosePanel.add(bishop);
+                                    choosePanel.add(knight);
+                                    choosePanel.add(rook);
+                                    choosePanel.add(queen);
+
+
+                                    chooseWindow.setVisible(true);
+                                    choosePanel.setVisible(true);
+                                }
+
+                                //Castling
+                                { //Castling
+                                    int deltaX = Math.abs(target.unitCoordinates.getX() - clickedUnit.unitCoordinates.getX());
+                                    if (target.getAbstractPiece().getType().equals("King") && deltaX > 1) {
+                                        if (deltaX == 2) {
+                                            ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
+                                            ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
+                                            move(targetPrim, sourceRook);
+                                        }
+                                        if (deltaX == 3) {
+                                            ChessBoardUnit targetPrim = chessBoard[target.unitCoordinates.getX() + 1][target.unitCoordinates.getY()];
+                                            ChessBoardUnit sourceRook = chessBoard[target.unitCoordinates.getX() - 1][target.unitCoordinates.getY()];
+                                            move(targetPrim, sourceRook);
+                                        }
+                                    }
+                                }
+
+                                updateChecks();
+                                clickedUnit.setBackground(clickedUnit.defaultColor);
+                                colorizeCheckedKings();
+                                clickedUnit = null;
+                                turn++;
+                                checkWin();
+                                if (!isP)
+                                    updateBoards();
+                            }
                         }
                     }
                 }
