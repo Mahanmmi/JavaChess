@@ -38,6 +38,7 @@ public class ChessBoardUnit extends JButton {
         if (abstractPiece != null) {
             this.setMargin(new Insets(0, 0, 0, 0));
             this.setIcon(abstractPiece.getIcon());
+            this.setDisabledIcon(abstractPiece.getIcon());
         }
         addListener();
     }
@@ -110,6 +111,7 @@ public class ChessBoardUnit extends JButton {
             if (targetAbstractPiece != null) {
                 chessBoard[move.getX()][move.getY()].setAbstractPiece(targetAbstractPiece);
                 chessBoard[move.getX()][move.getY()].setIcon(targetAbstractPiece.getIcon());
+                chessBoard[move.getX()][move.getY()].setDisabledIcon(targetAbstractPiece.getIcon());
 
             }
             updateChecks();
@@ -209,9 +211,11 @@ public class ChessBoardUnit extends JButton {
         }
         target.setAbstractPiece(source.getAbstractPiece());
         target.setIcon(source.getIcon());
+        target.setDisabledIcon(source.getIcon());
         source.setAbstractPiece(null);
 //        System.out.println(source);
         source.setIcon(null);
+        source.setDisabledIcon(null);
 
 
     }

@@ -43,6 +43,7 @@ class ChooseUnit extends JButton {
                 }
                 chessBoard[coordinate.getX()][coordinate.getY()].setAbstractPiece(newAbstractPiece);
                 chessBoard[coordinate.getX()][coordinate.getY()].setIcon(newAbstractPiece.getIcon());
+                chessBoard[coordinate.getX()][coordinate.getY()].setDisabledIcon(newAbstractPiece.getIcon());
                 changeButtonsState(true);
                 chooseWindow.dispose();
                 updateBoards();

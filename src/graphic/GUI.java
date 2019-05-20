@@ -176,6 +176,7 @@ class GUI {
                 whiteTakenBoard.add(tmp);
             }
             JButton takenPiece = new JButton(whiteTakenPiece.getIcon());
+            takenPiece.setDisabledIcon(whiteTakenPiece.getIcon());
             takenPiece.setBackground(Color.white);
             takenPiece.setEnabled(false);
             whiteTakenBoard.add(takenPiece);
@@ -190,6 +191,7 @@ class GUI {
                 blackTakenBoard.add(tmp);
             }
             JButton takenPiece = new JButton(blackTakenPiece.getIcon());
+            takenPiece.setDisabledIcon(blackTakenPiece.getIcon());
             takenPiece.setBackground(Color.black);
             takenPiece.setEnabled(false);
             blackTakenBoard.add(takenPiece);
