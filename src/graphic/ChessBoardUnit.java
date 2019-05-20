@@ -166,6 +166,7 @@ public class ChessBoardUnit extends JButton {
                 undoColorizeMovables(new Coordinate(i, j), thisAbstractPiece);
             }
         }
+
         if (checkColorChecked(true) && whiteAvailableMoves == 0 && turn % 2 == 0) {
             System.out.println("Winner is black!");
             showMessageDialog(null, "Winner is black!");
@@ -173,8 +174,8 @@ public class ChessBoardUnit extends JButton {
             System.exit(0);
             return;
         } else if (whiteAvailableMoves == 0 && turn % 2 == 0) {
-            System.out.println("POT!");
-            showMessageDialog(null, "POT!");
+            System.out.println("DRAW!");
+            showMessageDialog(null, "DRAW!");
             mainFrame.dispose();
             System.exit(0);
             return;
@@ -185,8 +186,8 @@ public class ChessBoardUnit extends JButton {
             mainFrame.dispose();
             System.exit(0);
         } else if (blackAvailableMoves == 0 && turn % 2 == 1) {
-            System.out.println("POT!");
-            showMessageDialog(null, "POT!");
+            System.out.println("DRAW!");
+            showMessageDialog(null, "DRAW!");
             mainFrame.dispose();
             System.exit(0);
         }
